@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import Register from './Register';
 import Login from './Login';
-
+import SearchResults from './SearchResults';
 function App() {
     return (
         <Router>
@@ -12,6 +12,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/search" element={<SearchResults />} />
             </Routes>
         </Router>
     );

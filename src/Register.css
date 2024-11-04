@@ -1,4 +1,14 @@
 /* src/Register.css */
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&display=swap');
+
+
+.intro-section h1 {
+    font-family: 'Prompt', sans-serif;
+    font-size: 1.5em;
+    color: #333;
+    margin-top:10px;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -11,17 +21,18 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    background-color: #f4f6f8;
 }
 
 .registration-container {
     background-color: white;
     width: 100%;
-    max-width: 400px;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    transform: translateY(-10%);
-    transition: transform 0.5s;
+    max-width: 380px;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5%);
+    transition: transform 0.4s;
 }
 
 .registration-container:hover {
@@ -30,45 +41,50 @@ body {
 
 .registration-container h2 {
     text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 18px;
+    font-size: 22px;
     color: #333;
 }
 
 .form-group {
-    margin-bottom: 20px;
-    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
+    width: 100px; /* Set a fixed width for labels to align inputs */
+    margin-right: 10px;
+    color: #fd0101;
     font-weight: bold;
+    font-size: 14px;
+    text-align: right; /* Align label text to the right */
 }
 
 .form-group input {
-    width: 100%;
-    padding: 12px 15px;
+    flex: 1; /* Take remaining space in the row */
+    padding: 10px 12px;
+    font-size: 14px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 6px;
     transition: border-color 0.3s;
 }
 
 .form-group input:focus {
     border-color: #66a6ff;
     outline: none;
-    box-shadow: 0 0 8px rgba(102, 166, 255, 0.2);
+    box-shadow: 0 0 6px rgba(102, 166, 255, 0.2);
 }
 
 .btn {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     color: white;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
+    background-color: #66a6ff;
     cursor: pointer;
     transition: background 0.3s;
 }
@@ -79,8 +95,9 @@ body {
 
 .login-link {
     text-align: center;
-    margin-top: 15px;
-    font-size: 14px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #333;
 }
 
 .login-link a {

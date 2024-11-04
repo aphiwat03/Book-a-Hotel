@@ -14,6 +14,10 @@ body {
     background: linear-gradient(135deg, #89f7fe, #66a6ff);
 }
 
+.login-container:hover {
+    transform: translateY(0);
+}
+
 .login-container {
     background-color: white;
     width: 100%;
@@ -21,6 +25,9 @@ body {
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5%);
+    transition: transform 0.4s;
+    
 }
 
 .login-container h2 {
