@@ -12,7 +12,7 @@ db = client['Hotel']
 users_collection = db['data_user']
 hotels_collection = db['data_hotel']
 booking_collection = db['booking']
-
+details_collection = db["detail"]
 # Setup for file uploads
 UPLOAD_FOLDER = './uploads'
 if not os.path.exists(UPLOAD_FOLDER):
@@ -120,6 +120,15 @@ def login_user():
         return jsonify({"message": "Login successful"}), 200
     else:
         return jsonify({"message": "Invalid email or password"}), 400
+    
+@app.route('/hotel-detail/', methods=['GET'])
+def get_hotel_detail(hotel_id):
+    hotel = details_collection.find_one({"hotel_id": hotel_id})
+    if hotel:
+        hotel["_id"] = str(hotel["_id"])  # แปลง _id ให้เป็นสตริง
+        return jsonify(hotel), 200
+    else:
+        return jsonify({"error": "Hotel not found"}), 404
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)

@@ -6,7 +6,7 @@ import Login from './Login';
 import SearchResults from './SearchResults';
 import HotelForm from './HotelForm';
 import HotelDetails from './Hotel_detail';
-
+import PaymentPage from './PaymentPage';
 function App() {
     return (
         <Router>
@@ -19,6 +19,8 @@ function App() {
                 <Route path="/hotelform" element={<HotelForm />} />
                 <Route path="/hoteldetail" element={<HotelDetails />} />
                 <Route path="/hoteldetail/:hotelId" element={<HotelDetails />} />
+                <Route path="/payment" element={<PaymentPage />} />
+
             </Routes>
         </Router>
     );

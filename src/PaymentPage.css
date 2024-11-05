@@ -1,0 +1,73 @@
+/* กำหนดขนาดและการจัดวางของฟอร์ม */
+.payment-page {
+    width: 90%;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* จัดเรียงข้อมูลการติดต่อในฟอร์มแบบตาราง */
+.contact-info {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 15px;
+    width: 100%; /* ให้ฟอร์มเต็มความกว้างของกรอบ */
+}
+
+.contact-info input, 
+.credit-card-info input {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box; /* ป้องกันการขยายเกินกรอบ */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+/* ปรับสไตล์ของปุ่ม */
+.submit-button, .cancel-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.submit-button {
+    background-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+.cancel-button {
+    background-color: #ccc;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+    background-color: #999;
+}
+
+/* ปรับขนาดและระยะห่างของตัวเลือกการชำระเงิน */
+.payment-option {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+}
+
+.payment-option label {
+    font-size: 1em;
+    color: #333;
+    cursor: pointer;
+}

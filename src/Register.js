@@ -40,7 +40,7 @@ function Register() {
             const result = await response.json();
             if (response.ok) {
                 alert(result.message);  // แสดงข้อความสำเร็จ
-                navigate('/home');  // นำไปสู่หน้าล็อกอิน
+                navigate('/login');  // นำไปสู่หน้าล็อกอิน
             } else {
                 setError(result.message);  // แสดงข้อผิดพลาดถ้ามี
             }
