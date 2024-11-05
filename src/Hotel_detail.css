@@ -1,0 +1,105 @@
+.header {
+    background-color: #1A4F83;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+.top-bar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #1A4F83; /* เปลี่ยนเป็นสีที่คุณต้องการ */
+    color: white;
+    padding: 10px;
+    z-index: 1000; /* ทำให้แถบนี้อยู่ด้านหน้าของคอนเทนต์ทั้งหมด */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* เพิ่มเงาเพื่อให้ดูเด่นขึ้น */
+}
+
+.amenities-list li {
+    margin-bottom: 10px;
+}
+
+.hotel-gallery {
+    top: 10000px;;
+    display: flex;
+    gap: 10px;
+    margin: 20px;
+    overflow-x: auto;
+}
+ 
+.hotel-details {
+    padding-top: 60px; /* เว้นช่องว่างด้านบนให้กับ top-bar */
+}
+
+
+.reviews-section {
+    margin-top: 20px; /* เพิ่มช่องว่างระหว่างส่วนรายละเอียดและส่วนรีวิว */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+
+.hotel-image {
+    width: 300px; /* ปรับขนาดความกว้างของรูปภาพ */
+    height: 200px; /* ปรับขนาดความสูงของรูปภาพ */
+    object-fit: cover; /* ทำให้รูปภาพถูกครอบอย่างสวยงาม */
+    border-radius: 8px;
+}
+
+.hotel-info {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.hotel-info h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+
+
+.location {
+    color: #777;
+}
+
+.rating {
+    font-size: 18px;
+    color: #555;
+}
+
+.tabs {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.tabs button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #1A4F83;
+}
+
+.description {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #444;
+}
+
+.book-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #1A4F83;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}

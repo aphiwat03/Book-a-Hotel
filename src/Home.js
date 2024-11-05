@@ -16,14 +16,6 @@ function Home() {
         <div className="home">
             <div className="top-bar">
                 <div className="logo">Book a Hotel</div>
-                <div className="auth-buttons">
-                    <Link to="/register">
-                        <button className="register-btn">ลงทะเบียน</button>
-                    </Link>
-                    <Link to="/login">
-                        <button className="login-btn">เข้าสู่ระบบ</button>
-                    </Link>
-                </div>
             </div>
 
             <main className="main-content">
