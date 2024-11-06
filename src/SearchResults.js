@@ -36,7 +36,7 @@ function SearchResults() {
     };
 
     const goToHotelDetail = (hotelId) => {
-        navigate(`/hoteldetail/${hotelId}`);
+        navigate(`/hotel-detail/${hotelId}`);
     };
 
     return (

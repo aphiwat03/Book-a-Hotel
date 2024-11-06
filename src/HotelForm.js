@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import './HotelForm.css';
+import { Link, useNavigate } from 'react-router-dom';
 
 function HotelForm() {
     const [hotelData, setHotelData] = useState({
@@ -9,16 +9,21 @@ function HotelForm() {
         location: '',
         description: '',
         rating: '',
-        price: '',   // เพิ่มฟิลด์ราคา
-        photo: null
+        price: '',
+        photo_urls: ['', '', '', '', ''], // เก็บ 5 รูปใน array
+        amenities: []
     });
+
+    const navigate = useNavigate();
+
+    const [amenity, setAmenity] = useState(''); // รักษาค่าของสิ่งอำนวยความสะดวกที่เพิ่มใหม่
 
     // Fetch the latest hotel ID from the backend when the component loads
     useEffect(() => {
         fetch('http://localhost:5000/latest-hotel-id')
             .then((response) => response.json())
             .then((data) => {
-                const newHotelId = data.latest_hotel_id + 1;  // Increment hotel_id
+                const newHotelId = data.latest_hotel_id + 1;
                 setHotelData((prevData) => ({ ...prevData, hotel_id: newHotelId }));
             })
             .catch((error) => {
@@ -31,25 +36,41 @@ function HotelForm() {
         setHotelData({ ...hotelData, [name]: value });
     };
 
-    const handleFileChange = (e) => {
-        setHotelData({ ...hotelData, photo: e.target.files[0] });
+    const handlePhotoUrlChange = (index, value) => {
+        const newPhotoUrls = [...hotelData.photo_urls];
+        newPhotoUrls[index] = value;
+        setHotelData({ ...hotelData, photo_urls: newPhotoUrls });
+    };
+
+    const handleAmenityChange = (e) => {
+        setAmenity(e.target.value);
+    };
+
+    const addAmenity = () => {
+        if (amenity) {
+            setHotelData((prevData) => ({
+                ...prevData,
+                amenities: [...prevData.amenities, amenity]
+            }));
+            setAmenity(''); // รีเซ็ตช่องป้อนข้อมูล
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        const formData = new FormData();
-        formData.append('hotel_id', hotelData.hotel_id);
-        formData.append('hotel_name', hotelData.hotel_name);
-        formData.append('location', hotelData.location);
-        formData.append('description', hotelData.description);
-        formData.append('rating', hotelData.rating);
-        formData.append('price', hotelData.price);  // เพิ่มฟิลด์ราคา
-        formData.append('photo', hotelData.photo);  // Add the photo file
-
+    
+        // เตรียมข้อมูลให้มีชื่อฟิลด์ที่ตรงกับ backend
+        const payload = {
+            ...hotelData,
+            photo_url: hotelData.photo_urls // เปลี่ยนชื่อฟิลด์จาก photo_urls เป็น photo_url
+        };
+    
         fetch('http://localhost:5000/add-hotel', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
         })
         .then((response) => {
             if (!response.ok) {
@@ -60,12 +81,16 @@ function HotelForm() {
         .then((data) => {
             console.log("Hotel data saved successfully:", data);
             alert("บันทึกข้อมูลโรงแรมสำเร็จ!");
+            navigate('/search'); // นำทางไปยังหน้า /search หลังจากบันทึกสำเร็จ
         })
         .catch((error) => {
             console.error("Error saving hotel data:", error);
             alert("เกิดข้อผิดพลาดในการบันทึกข้อมูลโรงแรม");
         });
     };
+    
+    
+    
 
     return (
         <div>
@@ -90,12 +115,31 @@ function HotelForm() {
                         <textarea name="description" id="description" value={hotelData.description} onChange={handleChange} required />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="price">ราคา</label> {/* ช่องสำหรับกรอกราคา */}
+                        <label htmlFor="price">ราคา</label>
                         <input type="number" name="price" id="price" value={hotelData.price} onChange={handleChange} required />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="photo">รูปภาพ</label>
-                        <input type="file" name="photo" id="photo" onChange={handleFileChange} accept="image/*" />
+                        <label htmlFor="amenities">สิ่งอำนวยความสะดวก</label>
+                        <input type="text" name="amenity" id="amenity" value={amenity} onChange={handleAmenityChange} placeholder="เพิ่มสิ่งอำนวยความสะดวก" />
+                        <button type="button" onClick={addAmenity}>เพิ่ม</button>
+                        <ul>
+                            {hotelData.amenities.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="form-group">
+                        <label>URL รูปภาพ (สูงสุด 5 รูป)</label>
+                        {hotelData.photo_urls.map((url, index) => (
+                            <input
+                                key={index}
+                                type="text"
+                                value={url}
+                                onChange={(e) => handlePhotoUrlChange(index, e.target.value)}
+                                placeholder={`URL รูปภาพ ${index + 1}`}
+                                required
+                            />
+                        ))}
                     </div>
                     <button type="submit" className="submit-btn">บันทึกข้อมูลโรงแรม</button>
                 </form>

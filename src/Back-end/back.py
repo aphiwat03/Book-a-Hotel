@@ -12,7 +12,7 @@ db = client['Hotel']
 users_collection = db['data_user']
 hotels_collection = db['data_hotel']
 booking_collection = db['booking']
-details_collection = db["detail"]
+details_collection = db["data_hotel"]
 # Setup for file uploads
 UPLOAD_FOLDER = './uploads'
 if not os.path.exists(UPLOAD_FOLDER):
@@ -22,7 +22,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app)
 
-# Endpoints
 
 @app.route("/")
 def greet():
@@ -38,7 +37,7 @@ def register_user():
     confirm_password = data.get('confirm_password')
 
     if users_collection.find_one({"email": email}):
-        return jsonify({"message": "Email already exists"}), 400
+        return jsonify({"message": "มีemailซ้ำกัน"}), 400
 
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     new_user = {
@@ -58,51 +57,38 @@ def get_latest_hotel_id():
     return jsonify({"latest_hotel_id": latest_id}), 200
 
 @app.route('/hotels', methods=['GET'])
-def get_all_hotels():
-    # ดึงข้อมูลจาก MongoDB รวมถึง field 'price'
-    hotels = list(hotels_collection.find({}, {
-        "_id": 0,
-        "hotel_id": 1,
-        "hotel_name": 1,
-        "location": 1,
-        "description": 1,
-        "rating": 1,
-        "photo_url": 1,
-        "price": 1  # เพิ่ม field 'price' ให้แน่ใจว่าเรียกข้อมูลได้
-    }))
-    return jsonify(hotels), 200
-
+def get_hotels():
+    hotels = list(hotels_collection.find({}, {'_id': 0}))  # ดึงข้อมูลทุกโรงแรม และไม่แสดง '_id'
+    return jsonify(hotels)
 
 @app.route('/add-hotel', methods=['POST'])
 def add_hotel():
-    # Handle new hotel addition
     try:
-        hotel_name = request.form.get('hotel_name')
-        location = request.form.get('location')
-        description = request.form.get('description')
-        rating = request.form.get('rating')
-        price = request.form.get('price')  # เพิ่มการรับค่า price จากฟอร์ม
+        hotel_name = request.json.get('hotel_name')
+        location = request.json.get('location')
+        description = request.json.get('description')
+        rating = request.json.get('rating')
+        price = request.json.get('price')
+        photo_urls = request.json.get('photo_urls', [])  # รับฟิลด์ photo_urls เป็น array
+        amenities = request.json.get('amenities', [])  # รับฟิลด์ amenities เป็น array
 
-        # Handle photo upload
-        photo = request.files.get('photo')
-        photo_url = None
-        if photo:
-            filename = secure_filename(photo.filename)
-            photo_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            photo.save(photo_path)
-            photo_url = photo_path
+        # หาค่า hotel_id ล่าสุดจากฐานข้อมูล
+        latest_hotel = hotels_collection.find_one(sort=[("hotel_id", -1)])
+        new_hotel_id = latest_hotel["hotel_id"] + 1 if latest_hotel else 1
 
         # Insert new hotel data
         new_hotel = {
+            "hotel_id": new_hotel_id,
             "hotel_name": hotel_name,
             "location": location,
             "description": description,
             "rating": rating,
-            "price": price,  # เพิ่มฟิลด์ price ในข้อมูลที่บันทึกลงฐานข้อมูล
-            "photo_url": photo_url
+            "price": price,
+            "photo_url": photo_urls,  # ใช้ photo_urls (array) สำหรับหลาย URL
+            "amenities": amenities
         }
         hotels_collection.insert_one(new_hotel)
-        return jsonify({"message": "เพิ่มโรมแรมสำเร็จ"}), 201
+        return jsonify({"message": "เพิ่มโรงแรมสำเร็จ"}), 201
     except Exception as e:
         print("Error:", e)
         return jsonify({"message": "An error occurred", "error": str(e)}), 500
@@ -121,14 +107,43 @@ def login_user():
     else:
         return jsonify({"message": "Invalid email or password"}), 400
     
-@app.route('/hotel-detail/', methods=['GET'])
+@app.route('/hotel-detail/<int:hotel_id>', methods=['GET'])
 def get_hotel_detail(hotel_id):
-    hotel = details_collection.find_one({"hotel_id": hotel_id})
+    hotel = hotels_collection.find_one({"hotel_id": hotel_id}, {"_id": 0})  # กรอง `_id` ออก
     if hotel:
-        hotel["_id"] = str(hotel["_id"])  # แปลง _id ให้เป็นสตริง
         return jsonify(hotel), 200
     else:
         return jsonify({"error": "Hotel not found"}), 404
+
+@app.route('/payment', methods=['POST'])
+def save_payment():
+    try:
+        data = request.json
+        hotel_id = data.get('hotel_id')  # ID of the selected hotel
+        email = data.get('email')
+        payment_method = data.get('payment_method')
+        amount = data.get('amount')  # Payment amount
+        f_name = data.get('f_name')  # First name
+        l_name = data.get('l_name')  # Last name
+        mobile = data.get('mobile')  # Mobile number
+        country_code = data.get('country_code')  # Country code
+        
+        # Payment data to store in MongoDB
+        payment_data = {
+            "hotel_id": hotel_id,
+            "email": email,
+            "f_name": f_name,
+            "l_name": l_name,
+            "mobile": mobile,
+            "country_code": country_code
+        }
+        
+        # Insert payment data into the 'payment' collection
+        db.payment.insert_one(payment_data)
+        return jsonify({"message": "Payment saved successfully"}), 201
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"message": "An error occurred", "error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)

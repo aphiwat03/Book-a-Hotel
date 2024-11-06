@@ -17,7 +17,7 @@ function Home() {
             <div className="top-bar">
                 <div className="logo">Book a Hotel</div>
             </div>
-
+            
             <main className="main-content">
                 <section className="intro-section">
                     <h1>เลือกพักโรงแรมที่ต้องการได้เลย</h1>

@@ -9,6 +9,18 @@ function Login() {
     const [isLoading, setIsLoading] = useState(false); // Loading state
     const navigate = useNavigate();
 
+    const handleLogin = () => {
+    const { email, password } = formData; // ดึง email และ password จาก formData
+
+    // เมื่อเข้าสู่ระบบสำเร็จ
+    localStorage.setItem('email', email);
+    localStorage.setItem('password', password);
+    
+    // นำทางไปยังหน้าถัดไป
+    navigate('/search');
+};
+    
+
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
         if (error) setError(''); // Clear error when user starts typing
@@ -25,6 +37,7 @@ function Login() {
     
             if (response.status === 200) {
                 alert(response.data.message);
+                handleLogin(); // เรียกใช้ handleLogin เพื่อบันทึกข้อมูลใน localStorage
                 navigate('/home');  // เปลี่ยนเส้นทางไปที่หน้า /home
             } else {
                 setError(response.data.message);
@@ -33,12 +46,13 @@ function Login() {
             if (error.response && error.response.data) {
                 setError(error.response.data.message);
             } else {
-                setError('รหัสผ่านหรือpasswordผิดพลาด');
+                setError('รหัสผ่านหรืออีเมลผิดพลาด');
             }
         } finally {
             setIsLoading(false); 
         }
     };
+    
     
 
     return (

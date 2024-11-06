@@ -24,12 +24,14 @@
 }
 
 .hotel-gallery {
-    top: 10000px;;
     display: flex;
     gap: 10px;
-    margin: 20px;
+    margin: 20px auto; /* ทำให้แกลเลอรีอยู่ตรงกลาง */
     overflow-x: auto;
+    justify-content: center; /* ทำให้รูปอยู่ตรงกลาง */
+    align-items: center;
 }
+
  
 .hotel-details {
     padding-top: 60px; /* เว้นช่องว่างด้านบนให้กับ top-bar */
